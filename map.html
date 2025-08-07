@@ -9,9 +9,11 @@
         <link rel="stylesheet" href="map.css">
     </head>
     <body>
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
         <div class="container">
-            <a href="index.html" class="nav-button">חזרה לעמוד הראשי</a>
+            <div class="map-header">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                <a href="index.html" class="nav-button">חזרה לעמוד הראשי</a>
+            </div>
             <div class="map-wrapper">
                 <iframe
                     src="https://www.google.com/maps/d/u/0/embed?mid=1hB6APxAe2NbGWmMrgfdEcIwmdmzQKOc&ehbc=2E312F&noprof=1"
@@ -20,7 +22,7 @@
                     referrerpolicy="no-referrer-when-downgrade">
                 </iframe>
             </div>
-        </div>         
+        </div>
         <script src="theme.js"></script>
     </body>
 </html>
