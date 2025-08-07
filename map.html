@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>Romania Map</title>
-    <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;✈️&lt;/text&gt;&lt;/svg&gt;">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <link rel="stylesheet" href="map.css">
-</head>
-<body>
-    <div class="container">
-        <a href="index.html" class="back-btn">חזרה לעמוד הראשי</a>
-        <div class="map-wrapper">
-            <iframe 
-                src="https://www.google.com/maps/d/u/0/embed?mid=1hB6APxAe2NbGWmMrgfdEcIwmdmzQKOc&ehbc=2E312F&noprof=1"
-                allowfullscreen
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
+   <head>
+        <meta charset="UTF-8" />
+        <title>Romania Map</title>
+        <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;✈️&lt;/text&gt;&lt;/svg&gt;">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="map.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="map-header">
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                <a href="index.html" class="nav-button">חזרה לעמוד הראשי</a>
+            </div>
+            <div class="map-wrapper">
+                <iframe
+                    src="https://www.google.com/maps/d/u/0/embed?mid=1hB6APxAe2NbGWmMrgfdEcIwmdmzQKOc&ehbc=2E312F&noprof=1"
+                    allowfullscreen
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
         </div>
-    </div>
-</body>
+        <script src="theme.js"></script>
+    </body>
 </html>
