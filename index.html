@@ -6,6 +6,7 @@
     <title>תוכנית טיול אינטראקטיבית לרומניה</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
@@ -310,7 +311,7 @@
             outputDiv.innerHTML = `<p class="p-3 bg-teal-100 text-teal-800 rounded-lg shadow-inner">${activity}</p>`;
         }
 
-        // פונקציה חדשה: קריאה ל-WeatherAPI.com והצגת נתוני מזג האוויר
+        // קריאה ל-WeatherAPI.com והצגת נתוני מזג האוויר
         async function fetchWeatherData(locationName) {
             const outputDiv = document.getElementById('weatherOutput');
             const placeholderCity = locationName.split(',')[0]; // השתמש בחלק הראשון של שם המיקום
@@ -450,7 +451,7 @@
             document.getElementById('funFactBtn').onclick = () => getFunFact(dayData.locations);
             document.getElementById('rainyDayBtn').onclick = () => getRainyDayActivity(dayData.locations);
             fetchWeatherData(dayData.locations[0]); // Fetch weather for the first location of the day
-            
+
             renderCharts(dayData);
         }
 
