@@ -508,5 +508,15 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            selectDay(0);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const start = new Date(2025, 8, 7); // September 7, 2025
+            const end = new Date(2025, 8, 16); // September 16, 2025
+
+            let defaultIndex = 0;
+            if (today >= start && today <= end) {
+                defaultIndex = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+            }
+
+            selectDay(defaultIndex);
         });
