@@ -468,7 +468,7 @@ function renderDayDetails(dayData) {
         <p class="text-center text-stone-600 mb-6">התרשים הבא מציג מפה אמיתית עם המסלול היומי, כשהזום תמיד מכיל את כל רומניה.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-stone-50 p-4 rounded-lg">
-            <h4 class="text-lg font-bold text-center mb-2">מסלול היום (מפה אמיתית)</h4>
+            <h4 class="text-lg font-bold text-center mb-2">מסלול היום</h4>
             <div id="realMap" class="leaflet-map"></div>
           </div>
           <div class="bg-stone-50 p-4 rounded-lg">
