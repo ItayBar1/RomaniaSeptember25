@@ -1,6 +1,8 @@
 <!DOCTYPE html>
+<!-- Main itinerary page displaying daily schedule, map and AI features -->
 <html lang="he" dir="rtl">
 <head>
+    <!-- Metadata and external styles -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="תוכנית טיול אינטראקטיבית לרומניה - 7-16 בספטמבר 2025, כולל מסלולים, מפות, מזג אוויר ועוד.">
@@ -8,46 +10,47 @@
     <title>תוכנית טיול אינטראקטיבית לרומניה</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;✈️&lt;/text&gt;&lt;/svg&gt;">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link 
-        rel="stylesheet" 
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
-        crossorigin="" 
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
     />
 </head>
 <body class="text-stone-800">
-
     <div class="container mx-auto p-4 md:p-8 max-w-7xl">
-        <!-- כפתור מעבר למפה כוללת וכפתור מצב כהה -->
+        <!-- Navigation buttons and theme toggle -->
         <div class="flex items-center justify-between mb-4">
             <a href="map.html" class="nav-button">מעבר למפה הכוללת של הטיול</a>
             <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
         </div>
+        <!-- Main heading -->
         <header class="text-center mb-8">
             <h1 class="text-4xl md:text-5xl font-bold text-teal-800">טיול לרומניה: המסלול המלא</h1>
             <p class="text-lg text-stone-600 mt-2">7 בספטמבר 2025 - 16 בספטמבר 2025</p>
         </header>
 
         <main class="flex flex-col md:flex-row-reverse gap-8">
-            
+            <!-- Timeline sidebar -->
             <aside id="timeline-nav" class="w-full md:w-1/4 lg:w-1/5 bg-white p-4 rounded-xl shadow-md flex-shrink-0">
                 <h2 class="text-xl font-bold mb-4 text-center border-b pb-2">ציר הזמן של הטיול</h2>
                 <div id="timeline-container" class="space-y-2">
                 </div>
             </aside>
 
+            <!-- Day details panel -->
             <section id="details-panel" class="w-full md:w-3/4 lg:w-4/5 bg-white p-6 rounded-xl shadow-lg">
                 <div id="day-content">
                 </div>
             </section>
-
         </main>
     </div>
+    <!-- Application scripts and Leaflet library -->
     <script src="theme.js"></script>
     <script src="script.js"></script>
     <script

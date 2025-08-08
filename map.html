@@ -1,21 +1,25 @@
 <!DOCTYPE html>
+<!-- Map page displaying the overall trip route -->
 <html lang="en">
    <head>
+        <!-- Metadata and styles -->
         <meta charset="UTF-8" />
         <meta name="description" content="תוכנית טיול אינטראקטיבית לרומניה - 7-16 בספטמבר 2025, כולל מסלולים, מפות, מזג אוויר ועוד.">
         <meta name="robots" content="index, follow">
         <title>Romania Map</title>
-        <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;✈️&lt;/text&gt;&lt;/svg&gt;">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="map.css">
     </head>
     <body>
         <div class="container">
+            <!-- Header with theme toggle and navigation back to main page -->
             <div class="map-header">
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
                 <a href="index.html" class="nav-button">חזרה לעמוד הראשי</a>
             </div>
+            <!-- Embedded Google Map for the itinerary -->
             <div class="map-wrapper">
                 <iframe
                     src="https://www.google.com/maps/d/u/0/embed?mid=1hB6APxAe2NbGWmMrgfdEcIwmdmzQKOc&ehbc=2E312F&noprof=1"
@@ -25,6 +29,7 @@
                 </iframe>
             </div>
         </div>
+        <!-- Theme management script -->
         <script src="theme.js"></script>
     </body>
 </html>

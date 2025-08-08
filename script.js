@@ -1,3 +1,4 @@
+// Main client-side logic for the Romania trip itinerary site
 // =============================
 // Itinerary data
 // =============================
@@ -200,6 +201,7 @@ let ALL_BOUNDS; // will be initialized after Leaflet is available
 // =============================
 let realMap, lightTiles, darkTiles;
 
+// Prepare light and dark tile layers for Leaflet
 function makeTiles() {
   // בהיר – OSM רגיל
   lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -214,7 +216,7 @@ function makeTiles() {
   });
 }
 
-// לחשוף ל-theme.js
+// Expose map theme switching to theme.js
 window.applyMapTheme = function applyMapTheme() {
   if (!realMap || (!lightTiles && !darkTiles)) return;
   const isDark = document.body.classList.contains('dark-mode');
@@ -227,8 +229,10 @@ window.applyMapTheme = function applyMapTheme() {
   }
 };
 
+// Helper to read CSS variables
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
+// Render Leaflet map for the given day
 function renderRealMap(dayData) {
   const mapEl = document.getElementById("realMap");
   if (!mapEl) return;
@@ -326,6 +330,7 @@ const dayContentContainer = document.getElementById("day-content");
 // =============================
 // AI helpers (Gemini proxy)
 // =============================
+// Call Gemini API via Netlify function with simple retry logic
 async function callGeminiApi(prompt, retries = 3) {
   const payload = { prompt };
   for (let i = 0; i < retries; i++) {
@@ -353,6 +358,7 @@ async function callGeminiApi(prompt, retries = 3) {
   return "אירעה שגיאה בטעינת המידע. אנא נסה שוב מאוחר יותר.";
 }
 
+// Sanitize AI output by removing quotes and translations
 function sanitizeAiText(str) {
   if (!str) return '';
   return String(str)
@@ -365,6 +371,7 @@ function sanitizeAiText(str) {
     .trim();
 }
 
+// Fetch a fun fact about one of the given locations
 async function getFunFact(locations) {
   const outputDiv = document.getElementById("funFactOutput");
   outputDiv.innerHTML = `<p class="text-center text-stone-500">טוען עובדה מהנה...</p>`;
@@ -374,6 +381,7 @@ async function getFunFact(locations) {
   outputDiv.innerHTML = `<p class="p-3 bg-teal-100 text-teal-800 rounded-lg shadow-inner">${clean}</p>`;
 }
 
+// Suggest an activity for a rainy day based on locations
 async function getRainyDayActivity(locations) {
   const outputDiv = document.getElementById("rainyDayOutput");
   outputDiv.innerHTML = `<p class="text-center text-stone-500">מחפש רעיון ליום גשום...</p>`;
@@ -389,6 +397,7 @@ async function getRainyDayActivity(locations) {
 // =============================
 // Weather (Netlify function proxy)
 // =============================
+// Retrieve current weather data for the first location
 async function fetchWeatherData(locationName) {
   const outputDiv = document.getElementById("weatherOutput");
   const placeholderCity = locationName.split(",")[0];
@@ -428,6 +437,7 @@ async function fetchWeatherData(locationName) {
 // =============================
 // Timeline and page rendering
 // =============================
+// Render the clickable timeline navigation
 function renderTimeline() {
   timelineContainer.innerHTML = "";
   itineraryData.forEach((day, index) => {
@@ -442,12 +452,14 @@ function renderTimeline() {
   });
 }
 
+// Change selected day and update content
 function selectDay(index) {
   currentDayIndex = index;
   renderTimeline();
   renderDayDetails(itineraryData[index]);
 }
 
+// Render details for the selected itinerary day
 function renderDayDetails(dayData) {
   dayContentContainer.innerHTML = `
     <div class="animate-fade-in">
@@ -533,6 +545,7 @@ function renderDayDetails(dayData) {
   renderCharts(dayData);
 }
 
+// Render bar chart comparing driving and activity hours
 function renderCharts(dayData) {
   const activityCtx = document.getElementById("activityChart").getContext("2d");
   if (activityChart) {
@@ -600,6 +613,7 @@ function renderCharts(dayData) {
 // =============================
 // Default day selection
 // =============================
+// Automatically select today's itinerary day on load
 document.addEventListener("DOMContentLoaded", () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);

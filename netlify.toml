@@ -1,2 +1,3 @@
+# Netlify configuration for build and functions
 [build]
   functions = "netlify/functions"
