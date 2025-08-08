@@ -181,47 +181,34 @@
         const timelineContainer = document.getElementById('timeline-container');
         const dayContentContainer = document.getElementById('day-content');
 
-        // Weather API configuration
-        const WEATHER_API_KEY = '9989fe473a594e3a84b211237250608';
-        const weatherApiUrl = 'https://api.weatherapi.com/v1/current.json';
+        // קריאה ל-Gemini API עם ניהול חזרה במקרה של שגיאות
+       async function callGeminiApi(prompt, retries = 3) {
+            const payload = { prompt };
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const resp = await fetch('/.netlify/functions/gemini', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload),
+                        });
 
-         // Gemini API configuration
-        const geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=';
-        const apiKey = 'AIzaSyDteorCQ1YkO896XSQEVyNeZ0ZUtMP3XRc'; 
+                        if (resp.status === 429 && i < retries - 1) {
+                            const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
+                            await new Promise(r => setTimeout(r, delay));
+                            continue;
+                        }
+                        if (!resp.ok) throw new Error(`API call failed: ${resp.status}`);
 
-        async function callGeminiApi(prompt, retries = 3) {
-            let chatHistory = [];
-            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            const payload = { contents: chatHistory };
-            
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const response = await fetch(geminiApiUrl + apiKey, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (response.status === 429 && i < retries - 1) {
-                        const delay = Math.pow(2, i) * 1000 + Math.random() * 1000;
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        continue;
+                        const result = await resp.json();
+                        const parts = result?.candidates?.[0]?.content?.parts;
+                        return parts?.[0]?.text || 'לא התקבלה תשובה.';
+                    } catch (err) {
+                        console.error('Gemini error:', err);
                     }
-                    if (!response.ok) {
-                         throw new Error(`API call failed with status: ${response.status}`);
-                    }
-                    const result = await response.json();
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        return result.candidates[0].content.parts[0].text;
-                    }
-                } catch (error) {
-                    console.error("Error fetching from Gemini API:", error);
                 }
-            }
-            return "אירעה שגיאה בטעינת המידע. אנא נסה שוב מאוחר יותר.";
-        }
+  return 'אירעה שגיאה בטעינת המידע. אנא נסה שוב מאוחר יותר.';
+}
+
 
         async function getFunFact(locations) {
             const outputDiv = document.getElementById('funFactOutput');
@@ -240,41 +227,42 @@
         }
 
         // קריאה ל-WeatherAPI.com והצגת נתוני מזג האוויר
-        async function fetchWeatherData(locationName) {
-            const outputDiv = document.getElementById('weatherOutput');
-            const placeholderCity = locationName.split(',')[0]; // השתמש בחלק הראשון של שם המיקום
-            
-            outputDiv.innerHTML = `<p class="text-center text-stone-500 dark:text-stone-400">טוען נתוני מזג אוויר עבור ${placeholderCity}...</p>`;
+    async function fetchWeatherData(locationName) {
+        const outputDiv = document.getElementById('weatherOutput');
+        const placeholderCity = locationName.split(',')[0];
+        outputDiv.innerHTML = `<p class="text-center text-stone-500 dark:text-stone-400">טוען נתוני מזג אוויר עבור ${placeholderCity}...</p>`;
 
-            try {
-                // Fetch weather data directly from WeatherAPI.com with the country specified.
-                const query = `${placeholderCity}, Romania`;
-                const response = await fetch(`${weatherApiUrl}?key=${WEATHER_API_KEY}&q=${encodeURIComponent(query)}&lang=he`);
-                const data = await response.json();
+        try {
+            const q = `${placeholderCity}, Romania`;
+            const resp = await fetch(`/.netlify/functions/weather`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ q, lang: 'he' }),
+            });
+            const data = await resp.json();
 
-                if (response.ok) {
-                    const temp = Math.round(data.current.temp_c);
-                    const description = data.current.condition.text;
-                    const iconUrl = `https:${data.current.condition.icon}`;
-                    
-                    outputDiv.innerHTML = `
-                        <div class="flex items-center justify-center p-3 rounded-lg shadow-inner bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-teal-100">
-                            <img src="${iconUrl}" alt="${description}" class="w-12 h-12 ml-2">
-                            <div>
-                                <p class="text-xl font-bold">${temp}°C</p>
-                                <p class="text-sm">${description}</p>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    outputDiv.innerHTML = `<p class="text-center text-red-500">שגיאה: לא ניתן לטעון נתוני מזג אוויר עבור ${placeholderCity}.</p>`;
-                    console.error("WeatherAPI.com API error:", data.error.message);
-                }
-            } catch (error) {
-                outputDiv.innerHTML = `<p class="text-center text-red-500">שגיאה בחיבור לשירות מזג האוויר.</p>`;
-                console.error("WeatherAPI.com fetch error:", error);
+            if (resp.ok) {
+            const temp = Math.round(data.current.temp_c);
+            const description = data.current.condition.text;
+            const iconUrl = `https:${data.current.condition.icon}`;
+            outputDiv.innerHTML = `
+                <div class="flex items-center justify-center p-3 rounded-lg shadow-inner bg-teal-100 text-teal-800 dark:bg-teal-700 dark:text-teal-100">
+                <img src="${iconUrl}" alt="${description}" class="w-12 h-12 ml-2">
+                <div>
+                    <p class="text-xl font-bold">${temp}°C</p>
+                    <p class="text-sm">${description}</p>
+                </div>
+                </div>`;
+            } else {
+            outputDiv.innerHTML = `<p class="text-center text-red-500">שגיאה: לא ניתן לטעון נתוני מזג אוויר עבור ${placeholderCity}.</p>`;
+            console.error("Weather error:", data);
             }
+        } catch (err) {
+            outputDiv.innerHTML = `<p class="text-center text-red-500">שגיאה בחיבור לשירות מזג האוויר.</p>`;
+            console.error(err);
         }
+    }
+
 
 
         function renderTimeline() {

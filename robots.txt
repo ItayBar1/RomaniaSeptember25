@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://romania-september25.netlify.app/sitemap.xml

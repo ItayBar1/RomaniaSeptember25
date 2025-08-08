@@ -1,0 +1,17 @@
+# מערכת הפעלה
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+npm-debug.log*
+
+# בנייה
+dist/
+build/
+
+# Netlify
+.netlify/
+
+# משתני סביבה
+.env
