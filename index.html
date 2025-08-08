@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="תוכנית טיול אינטראקטיבית לרומניה - 7-16 בספטמבר 2025, כולל מסלולים, מפות, מזג אוויר ועוד.">
+    <meta name="robots" content="index, follow">
     <title>תוכנית טיול אינטראקטיבית לרומניה</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -15,9 +17,10 @@
 <body class="text-stone-800">
 
     <div class="container mx-auto p-4 md:p-8 max-w-7xl">
-        <!-- כפתור מעבר למפה כוללת -->
-        <div class="flex justify-start mb-4">
+        <!-- כפתור מעבר למפה כוללת וכפתור מצב כהה -->
+        <div class="flex items-center justify-between mb-4">
             <a href="map.html" class="nav-button">מעבר למפה הכוללת של הטיול</a>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
         </div>
         <header class="text-center mb-8">
             <h1 class="text-4xl md:text-5xl font-bold text-teal-800">טיול לרומניה: המסלול המלא</h1>
@@ -39,6 +42,7 @@
 
         </main>
     </div>
+    <script src="theme.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
