@@ -108,15 +108,18 @@ body {
   overflow: hidden;
 }
 
-/* שקיפות האריחים (הרקע) לשמירה על מראה עדין */
-.leaflet-tile-pane {
-  opacity: 0.35; /* "שקיפות נמוכה" כמבוקש */
-}
+/* ברירת מחדל (מצב בהיר) – שקיפות עדינה בלבד */
+.leaflet-tile-pane { opacity: 0.65; }
 
-/* מצב כהה – מעט פחות אטום כדי לשפר קונטרסט */
-body.dark-mode .leaflet-tile-pane {
-  opacity: 0.28;
-  filter: grayscale(10%);
+/* מצב כהה – שקיפות עדינה יותר (שומר על טקסט/כבישים חדים) */
+body.dark-mode .leaflet-tile-pane { opacity: 0.85; }
+
+/* טולטיפים נוחים לקריאה על מפה כהה */
+.leaflet-tooltip {
+  background: rgba(17, 24, 39, 0.92); /* slate-900 */
+  color: #e5e7eb; /* gray-200 */
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,.35);
 }
 
 /* צבעי שכבות עליונות (נקודות/קווים) יתאמו ל־CSS Vars הקיימים */

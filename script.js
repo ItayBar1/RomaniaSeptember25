@@ -198,7 +198,37 @@ let ALL_BOUNDS; // will be initialized after Leaflet is available
 // =============================
 // Leaflet map rendering
 // =============================
-let realMap; // Leaflet instance
+let realMap, lightTiles, darkTiles;
+
+function makeTiles() {
+  // בהיר – OSM רגיל
+  lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '© OpenStreetMap'
+  });
+
+  // כהה – Stadia (חד וקריא)
+  darkTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18,
+    attribution: '© OpenStreetMap, © Stadia Maps'
+  });
+}
+
+// לחשוף ל-theme.js
+window.applyMapTheme = function applyMapTheme() {
+  if (!realMap || (!lightTiles && !darkTiles)) return;
+  const isDark = document.body.classList.contains('dark-mode');
+  if (isDark) {
+    if (lightTiles && realMap.hasLayer(lightTiles)) realMap.removeLayer(lightTiles);
+    if (darkTiles && !realMap.hasLayer(darkTiles)) darkTiles.addTo(realMap);
+  } else {
+    if (darkTiles && realMap.hasLayer(darkTiles)) realMap.removeLayer(darkTiles);
+    if (lightTiles && !realMap.hasLayer(lightTiles)) lightTiles.addTo(realMap);
+  }
+};
+
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
 function renderRealMap(dayData) {
   const mapEl = document.getElementById("realMap");
   if (!mapEl) return;
@@ -212,6 +242,8 @@ function renderRealMap(dayData) {
     realMap = null;
   }
 
+  if (!lightTiles || !darkTiles) makeTiles();
+
   realMap = L.map(mapEl, {
     zoomControl: false,
     attributionControl: false,
@@ -223,22 +255,18 @@ function renderRealMap(dayData) {
     tap: false
   });
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18 }).addTo(realMap);
+  window.applyMapTheme();
 
   // All POIs (subtle)
   Object.entries(coordsLatLng).forEach(([name, ll]) => {
+    // נקודות רקע (All POIs) – נשאר עדין
     L.circleMarker([ll.lat, ll.lng], {
       radius: 5,
-      color: getComputedStyle(document.documentElement)
-        .getPropertyValue("--poi-color")
-        .trim(),
-      fillColor: getComputedStyle(document.documentElement)
-        .getPropertyValue("--poi-color")
-        .trim(),
+      color: css('--poi-color'),
+      fillColor: css('--poi-color'),
       fillOpacity: 0.9,
       weight: 1
-    })
-      .bindTooltip(name, { direction: "top" })
+    }).bindTooltip(name, { direction: "top" })
       .addTo(realMap);
   });
 
@@ -253,28 +281,23 @@ function renderRealMap(dayData) {
   });
 
   dayLatLngs.forEach((latlng, i) => {
-    L.circleMarker(latlng, {
-      radius: 8,
-      color: getComputedStyle(document.documentElement)
-        .getPropertyValue("--route-stroke")
-        .trim(),
-      weight: 2,
-      fillColor: getComputedStyle(document.documentElement)
-        .getPropertyValue("--route-color")
-        .trim(),
-      fillOpacity: 1
-    })
-      .bindTooltip(dayNames[i], { direction: "top" })
+      // נקודות היום – גדולות יותר וקונטור בהיר
+      L.circleMarker(latlng, {
+      radius: 5,
+      color: css('--route-stroke'),  // לבן בדארק
+      weight: 3,
+      fillColor: css('--route-color'), // טורקיז/ציאן בהיר
+      fillOpacity: 0.95
+    }).bindTooltip(dayNames[i], { direction: "top" })
       .addTo(realMap);
   });
 
   if (dayLatLngs.length >= 2) {
+    // קו מסלול – עבה עם נראות גבוהה
     L.polyline(dayLatLngs, {
-      color: getComputedStyle(document.documentElement)
-        .getPropertyValue("--route-color")
-        .trim(),
+      color: css('--route-color'),
       weight: 3,
-      opacity: 0.9
+      opacity: 0.95
     }).addTo(realMap);
   }
 

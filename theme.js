@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
             body.classList.remove('dark-mode', 'dark');
             toggle.textContent = '🌙';
         }
+        if (typeof window.applyMapTheme === 'function') {
+            window.applyMapTheme();
+        }
     }
 
     const saved = localStorage.getItem(STORAGE_KEY);
