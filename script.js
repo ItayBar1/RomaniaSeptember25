@@ -330,12 +330,25 @@ async function callGeminiApi(prompt, retries = 3) {
   return "אירעה שגיאה בטעינת המידע. אנא נסה שוב מאוחר יותר.";
 }
 
+function sanitizeAiText(str) {
+  if (!str) return '';
+  return String(str)
+    // הסרת מרכאות / גרשיים בתחילת/סוף
+    .replace(/^["'׳״]+|["'׳״]+$/g, '')
+    // הסרת תרגום לאנגלית בסוגריים (כל סוגריים שיש בהם אותיות לטיניות)
+    .replace(/\((?=[^)]*[A-Za-z])[^(]*\)/g, '')
+    // ריווח
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
 async function getFunFact(locations) {
   const outputDiv = document.getElementById("funFactOutput");
   outputDiv.innerHTML = `<p class="text-center text-stone-500">טוען עובדה מהנה...</p>`;
   const prompt = `Provide a single, short, and interesting fun fact in Hebrew about one of the following locations in Romania: ${locations.join(", ")}. Do not include the location name at the beginning of the fact.`;
   const fact = await callGeminiApi(prompt);
-  outputDiv.innerHTML = `<p class="p-3 bg-teal-100 text-teal-800 rounded-lg shadow-inner">${fact}</p>`;
+  const clean = sanitizeAiText(fact);
+  outputDiv.innerHTML = `<p class="p-3 bg-teal-100 text-teal-800 rounded-lg shadow-inner">${clean}</p>`;
 }
 
 async function getRainyDayActivity(locations) {
@@ -345,8 +358,9 @@ async function getRainyDayActivity(locations) {
     'Answer in Hebrew only. Only English spellings of place names are allowed (e.g. "Brasov", "Sibiu") and no translation in parentheses.',
     `Give one specific and short recommendation for a rainy day activity, based on the following places in Romania: ${locations.join(', ')}.`,
     'Respond in one sentence only, without opening/closing text, without quotation marks and without parentheses.'].join(' ');
-const activity = await callGeminiApi(prompt);
-  outputDiv.innerHTML = `<p class="p-3 bg-teal-100 text-teal-800 rounded-lg shadow-inner">${activity}</p>`;
+  const activity = await callGeminiApi(prompt);
+  const clean = sanitizeAiText(activity);
+  outputDiv.innerHTML = `<p class="p-3 bg-teal-100 text-teal-800 rounded-lg shadow-inner">${clean}</p>`;
 }
 
 // =============================
