@@ -16,7 +16,11 @@
         <div class="container">
             <!-- Header with theme toggle and navigation back to main page -->
             <div class="map-header">
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                <select id="theme-select" class="theme-select" aria-label="Theme selector">
+                    <option value="light">בהיר</option>
+                    <option value="dark">כהה</option>
+                    <option value="system">מערכת</option>
+                </select>
                 <a href="index.html" class="nav-button">חזרה לעמוד הראשי</a>
             </div>
             <!-- Embedded Google Map for the itinerary -->
