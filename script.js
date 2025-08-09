@@ -1,3 +1,4 @@
+// Main client-side logic for the Romania trip itinerary site
 // =============================
 // Itinerary data
 // =============================
@@ -198,7 +199,40 @@ let ALL_BOUNDS; // will be initialized after Leaflet is available
 // =============================
 // Leaflet map rendering
 // =============================
-let realMap; // Leaflet instance
+let realMap, lightTiles, darkTiles;
+
+// Prepare light and dark tile layers for Leaflet
+function makeTiles() {
+  // בהיר – OSM רגיל
+  lightTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '© OpenStreetMap'
+  });
+
+  // כהה – Stadia (חד וקריא)
+  darkTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+    maxZoom: 18,
+    attribution: '© OpenStreetMap, © Stadia Maps'
+  });
+}
+
+// Expose map theme switching to theme.js
+window.applyMapTheme = function applyMapTheme() {
+  if (!realMap || (!lightTiles && !darkTiles)) return;
+  const isDark = document.body.classList.contains('dark-mode');
+  if (isDark) {
+    if (lightTiles && realMap.hasLayer(lightTiles)) realMap.removeLayer(lightTiles);
+    if (darkTiles && !realMap.hasLayer(darkTiles)) darkTiles.addTo(realMap);
+  } else {
+    if (darkTiles && realMap.hasLayer(darkTiles)) realMap.removeLayer(darkTiles);
+    if (lightTiles && !realMap.hasLayer(lightTiles)) lightTiles.addTo(realMap);
+  }
+};
+
+// Helper to read CSS variables
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+// Render Leaflet map for the given day
 function renderRealMap(dayData) {
   const mapEl = document.getElementById("realMap");
   if (!mapEl) return;
@@ -212,6 +246,8 @@ function renderRealMap(dayData) {
     realMap = null;
   }
 
+  if (!lightTiles || !darkTiles) makeTiles();
+
   realMap = L.map(mapEl, {
     zoomControl: false,
     attributionControl: false,
@@ -223,22 +259,18 @@ function renderRealMap(dayData) {
     tap: false
   });
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 18 }).addTo(realMap);
+  window.applyMapTheme();
 
   // All POIs (subtle)
   Object.entries(coordsLatLng).forEach(([name, ll]) => {
+    // נקודות רקע (All POIs) – נשאר עדין
     L.circleMarker([ll.lat, ll.lng], {
       radius: 5,
-      color: getComputedStyle(document.documentElement)
-        .getPropertyValue("--poi-color")
-        .trim(),
-      fillColor: getComputedStyle(document.documentElement)
-        .getPropertyValue("--poi-color")
-        .trim(),
+      color: css('--poi-color'),
+      fillColor: css('--poi-color'),
       fillOpacity: 0.9,
       weight: 1
-    })
-      .bindTooltip(name, { direction: "top" })
+    }).bindTooltip(name, { direction: "top" })
       .addTo(realMap);
   });
 
@@ -253,28 +285,23 @@ function renderRealMap(dayData) {
   });
 
   dayLatLngs.forEach((latlng, i) => {
-    L.circleMarker(latlng, {
-      radius: 8,
-      color: getComputedStyle(document.documentElement)
-        .getPropertyValue("--route-stroke")
-        .trim(),
-      weight: 2,
-      fillColor: getComputedStyle(document.documentElement)
-        .getPropertyValue("--route-color")
-        .trim(),
-      fillOpacity: 1
-    })
-      .bindTooltip(dayNames[i], { direction: "top" })
+      // נקודות היום – גדולות יותר וקונטור בהיר
+      L.circleMarker(latlng, {
+      radius: 5,
+      color: css('--route-stroke'),  // לבן בדארק
+      weight: 3,
+      fillColor: css('--route-color'), // טורקיז/ציאן בהיר
+      fillOpacity: 0.95
+    }).bindTooltip(dayNames[i], { direction: "top" })
       .addTo(realMap);
   });
 
   if (dayLatLngs.length >= 2) {
+    // קו מסלול – עבה עם נראות גבוהה
     L.polyline(dayLatLngs, {
-      color: getComputedStyle(document.documentElement)
-        .getPropertyValue("--route-color")
-        .trim(),
+      color: css('--route-color'),
       weight: 3,
-      opacity: 0.9
+      opacity: 0.95
     }).addTo(realMap);
   }
 
@@ -303,6 +330,7 @@ const dayContentContainer = document.getElementById("day-content");
 // =============================
 // AI helpers (Gemini proxy)
 // =============================
+// Call Gemini API via Netlify function with simple retry logic
 async function callGeminiApi(prompt, retries = 3) {
   const payload = { prompt };
   for (let i = 0; i < retries; i++) {
@@ -330,6 +358,7 @@ async function callGeminiApi(prompt, retries = 3) {
   return "אירעה שגיאה בטעינת המידע. אנא נסה שוב מאוחר יותר.";
 }
 
+// Sanitize AI output by removing quotes and translations
 function sanitizeAiText(str) {
   if (!str) return '';
   return String(str)
@@ -342,6 +371,7 @@ function sanitizeAiText(str) {
     .trim();
 }
 
+// Fetch a fun fact about one of the given locations
 async function getFunFact(locations) {
   const outputDiv = document.getElementById("funFactOutput");
   outputDiv.innerHTML = `<p class="text-center text-stone-500">טוען עובדה מהנה...</p>`;
@@ -351,6 +381,7 @@ async function getFunFact(locations) {
   outputDiv.innerHTML = `<p class="p-3 bg-teal-100 text-teal-800 rounded-lg shadow-inner">${clean}</p>`;
 }
 
+// Suggest an activity for a rainy day based on locations
 async function getRainyDayActivity(locations) {
   const outputDiv = document.getElementById("rainyDayOutput");
   outputDiv.innerHTML = `<p class="text-center text-stone-500">מחפש רעיון ליום גשום...</p>`;
@@ -366,6 +397,7 @@ async function getRainyDayActivity(locations) {
 // =============================
 // Weather (Netlify function proxy)
 // =============================
+// Retrieve current weather data for the first location
 async function fetchWeatherData(locationName) {
   const outputDiv = document.getElementById("weatherOutput");
   const placeholderCity = locationName.split(",")[0];
@@ -405,6 +437,7 @@ async function fetchWeatherData(locationName) {
 // =============================
 // Timeline and page rendering
 // =============================
+// Render the clickable timeline navigation
 function renderTimeline() {
   timelineContainer.innerHTML = "";
   itineraryData.forEach((day, index) => {
@@ -419,12 +452,14 @@ function renderTimeline() {
   });
 }
 
+// Change selected day and update content
 function selectDay(index) {
   currentDayIndex = index;
   renderTimeline();
   renderDayDetails(itineraryData[index]);
 }
 
+// Render details for the selected itinerary day
 function renderDayDetails(dayData) {
   dayContentContainer.innerHTML = `
     <div class="animate-fade-in">
@@ -510,6 +545,7 @@ function renderDayDetails(dayData) {
   renderCharts(dayData);
 }
 
+// Render bar chart comparing driving and activity hours
 function renderCharts(dayData) {
   const activityCtx = document.getElementById("activityChart").getContext("2d");
   if (activityChart) {
@@ -577,6 +613,7 @@ function renderCharts(dayData) {
 // =============================
 // Default day selection
 // =============================
+// Automatically select today's itinerary day on load
 document.addEventListener("DOMContentLoaded", () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);

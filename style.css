@@ -74,28 +74,24 @@ body {
     color: var(--text-color);
 }
 
-/* Theme toggle button */
-.theme-toggle {
-    padding: 0.6rem;
-    font-size: 1.25rem;
+/* Theme selection dropdown */
+.theme-select {
+    padding: 0.4rem 0.6rem;
+    font-size: 1rem;
     border-radius: 0.75rem;
     border: 1px solid var(--nav-button-border);
     background-color: var(--nav-button-bg);
     color: var(--nav-button-color);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
     box-shadow: 0 1px 4px rgba(15, 118, 110, 0.15);
-    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+    transition: background-color 0.2s, color 0.2s;
 }
 
-.theme-toggle:hover,
-.theme-toggle:focus {
+.theme-select:hover,
+.theme-select:focus {
     background-color: var(--nav-button-hover-bg);
     color: var(--nav-button-hover-color);
     border-color: var(--nav-button-hover-border);
-    transform: scale(1.05);
 }
 
 /* גובה/פריסה בקארד כמו המפה הסכמטית */
@@ -108,15 +104,18 @@ body {
   overflow: hidden;
 }
 
-/* שקיפות האריחים (הרקע) לשמירה על מראה עדין */
-.leaflet-tile-pane {
-  opacity: 0.35; /* "שקיפות נמוכה" כמבוקש */
-}
+/* ברירת מחדל (מצב בהיר) – שקיפות עדינה בלבד */
+.leaflet-tile-pane { opacity: 0.65; }
 
-/* מצב כהה – מעט פחות אטום כדי לשפר קונטרסט */
-body.dark-mode .leaflet-tile-pane {
-  opacity: 0.28;
-  filter: grayscale(10%);
+/* מצב כהה – שקיפות עדינה יותר (שומר על טקסט/כבישים חדים) */
+body.dark-mode .leaflet-tile-pane { opacity: 0.85; }
+
+/* טולטיפים נוחים לקריאה על מפה כהה */
+.leaflet-tooltip {
+  background: rgba(17, 24, 39, 0.92); /* slate-900 */
+  color: #e5e7eb; /* gray-200 */
+  border: none;
+  box-shadow: 0 2px 10px rgba(0,0,0,.35);
 }
 
 /* צבעי שכבות עליונות (נקודות/קווים) יתאמו ל־CSS Vars הקיימים */
