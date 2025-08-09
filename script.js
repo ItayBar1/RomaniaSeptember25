@@ -210,8 +210,11 @@ function makeTiles() {
   });
 
   // כהה – Stadia (חד וקריא)
-  darkTiles = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+  const STADIA_KEY = 'a44eeef5-cafe-4582-96e2-2792a30495db';
+  darkTiles = L.tileLayer(`https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${STADIA_KEY}`,
+     {
     maxZoom: 18,
+    detectRetina: true,
     attribution: '© OpenStreetMap, © Stadia Maps'
   });
 }
@@ -500,7 +503,6 @@ function renderDayDetails(dayData) {
 
       <div class="border-t pt-6">
         <h3 class="text-2xl font-bold text-center mb-4">ייצוג חזותי של היום</h3>
-        <p class="text-center text-stone-600 mb-6">התרשים הבא מציג מפה אמיתית עם המסלול היומי, כשהזום תמיד מכיל את כל רומניה.</p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-stone-50 p-4 rounded-lg">
             <h4 class="text-lg font-bold text-center mb-2">מסלול היום</h4>
