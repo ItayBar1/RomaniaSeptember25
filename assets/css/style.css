@@ -164,6 +164,10 @@ body.dark-mode .bg-white {
 body.dark-mode .bg-white\/80 {
     background-color: rgba(51, 65, 85, 0.8) !important;
 }
+body.dark-mode .bg-404 {
+    background-color: rgba(0,0,0,0.5);
+    background-blend-mode: multiply;
+}
 body.dark-mode .bg-stone-50 {
     background-color: #1e293b !important;
 }
