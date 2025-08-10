@@ -170,6 +170,13 @@ const itineraryData = [
   }
 ];
 
+// Helper to derive weekday name in Hebrew for a given date string ("d.m.yy")
+function getWeekdayName(dateStr) {
+  const [day, month, year] = dateStr.split('.').map(Number);
+  const date = new Date(2000 + year, month - 1, day);
+  return new Intl.DateTimeFormat('he-IL', { weekday: 'long' }).format(date);
+}
+
 // =============================
 // Geo coordinates (WGS84)
 // =============================
@@ -464,10 +471,11 @@ function selectDay(index) {
 
 // Render details for the selected itinerary day
 function renderDayDetails(dayData) {
+  const weekday = getWeekdayName(dayData.date);
   dayContentContainer.innerHTML = `
     <div class="animate-fade-in">
       <h2 class="text-3xl font-bold text-teal-700 mb-1">יום ${dayData.day}: ${dayData.title}</h2>
-      <p class="text-stone-500 mb-4 text-lg">${dayData.date}</p>
+      <p class="text-stone-500 mb-4 text-lg">${weekday} ${dayData.date}</p>
       <p class="mb-6 text-base leading-relaxed">${dayData.intro}</p>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
