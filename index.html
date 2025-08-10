@@ -1,66 +1,123 @@
-<!DOCTYPE html>
+<!doctype html>
 <!-- Main itinerary page displaying daily schedule, map and AI features -->
 <html lang="he" dir="rtl">
-<head>
-    <!-- Metadata and external styles -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="תוכנית טיול אינטראקטיבית לרומניה - 7-16 בספטמבר 2025, כולל מסלולים, מפות, מזג אוויר ועוד.">
-    <meta name="robots" content="index, follow">
-    <title>תוכנית טיול אינטראקטיבית לרומניה</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-        crossorigin=""
-    />
-</head>
-<body class="text-stone-800">
-    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
-        <!-- Navigation buttons and theme toggle -->
-        <div class="flex items-center justify-between mb-4">
-            <a href="map.html" class="nav-button">מעבר למפה הכוללת של הטיול</a>
-            <select id="theme-select" class="theme-select" aria-label="Theme selector">
-                <option value="light">בהיר</option>
-                <option value="dark">כהה</option>
-                <option value="system">מערכת</option>
-            </select>
+    <head>
+        <!-- ===== מידע בסיסי על הדף ===== -->
+        <meta charset="UTF-8" />
+        <!-- קידוד UTF-8 לתמיכה בעברית -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- התאמה למובייל -->
+        <meta http-equiv="Content-Language" content="he" />
+        <!-- שפת הדף: עברית -->
+        <title>תוכנית טיול אינטראקטיבית לרומניה</title>
+        <!-- כותרת הדף (גם בלשונית הדפדפן וגם בגוגל) -->
+
+        <!-- ===== SEO (קידום אתרים במנועי חיפוש) ===== -->
+        <meta
+            name="description"
+            content="תוכנית טיול אינטראקטיבית לרומניה - 7-16 בספטמבר 2025, כולל מסלולים, מפות, מזג אוויר ועוד."
+        />
+        <!-- תיאור שיוצג בגוגל -->
+        <meta
+            name="keywords"
+            content="רומניה, טיול, 2025, מסלולים, מפות, ספטמבר, בראשוב, בוקרשט, קלוז נפוקה, סיביו, טראנספשרגן"
+        />
+        <!-- מילות מפתח (לא חובה, אבל לא מזיק) -->
+        <meta name="robots" content="index, follow" />
+        <!-- מאפשר לגוגל לאנדקס ולעקוב אחרי קישורים -->
+        <link rel="canonical" href="https://romania-september25.netlify.app/" />
+        <!-- הכתובת הרשמית למניעת כפילויות בגוגל -->
+
+        <!-- ===== Open Graph (תצוגה מקדימה ברשתות חברתיות) ===== -->
+        <meta property="og:url" content="https://romania-september25.netlify.app/" />
+        <!-- כתובת הדף -->
+        <meta property="og:type" content="website" />
+        <!-- סוג התוכן -->
+        <meta property="og:title" content="מדריך טיול לרומניה" />
+        <!-- כותרת בתצוגה מקדימה -->
+        <meta
+            property="og:description"
+            content="תוכנית טיול אינטראקטיבית לרומניה - 7-16 בספטמבר 2025, כולל מסלולים, מפות, מזג אוויר ועוד."
+        />
+        <!-- תיאור בתצוגה מקדימה -->
+        <meta property="og:image" content="https://photos.app.goo.gl/z43zm71QfeTypPLZ8" />
+        <!-- תמונה לתצוגה מקדימה (עדיף קובץ ישיר, לא קישור Google Photos) -->
+
+        <!-- ===== Twitter Card (תצוגה מקדימה בטוויטר/X) ===== -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <!-- פורמט תצוגה גדול -->
+        <meta name="twitter:title" content="מדריך טיול לרומניה" />
+        <meta
+            name="twitter:description"
+            content="תוכנית טיול אינטראקטיבית לרומניה - 7-16 בספטמבר 2025, כולל מסלולים, מפות, מזג אוויר ועוד."
+        />
+        <meta name="twitter:image" content="https://photos.app.goo.gl/z43zm71QfeTypPLZ8" />
+        <!-- אותו דבר כמו og:image -->
+
+        <!-- ===== עיצובים, פונטים ואייקונים ===== -->
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>"
+        />
+        <!-- אייקון בטאב -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+
+        <!-- ===== ספריות חיצוניות ===== -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""
+        />
+    </head>
+    <body class="text-stone-800">
+        <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+            <!-- Navigation buttons and theme toggle -->
+            <div class="flex items-center justify-between mb-4">
+                <a href="map.html" class="nav-button">מעבר למפה הכוללת של הטיול</a>
+                <select id="theme-select" class="theme-select" aria-label="Theme selector">
+                    <option value="light">בהיר</option>
+                    <option value="dark">כהה</option>
+                    <option value="system">מערכת</option>
+                </select>
+            </div>
+            <!-- Main heading -->
+            <header class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-teal-800">טיול לרומניה: המסלול המלא</h1>
+                <p class="text-lg text-stone-600 mt-2">7 בספטמבר 2025 - 16 בספטמבר 2025</p>
+            </header>
+
+            <main class="flex flex-col md:flex-row-reverse gap-8">
+                <!-- Timeline sidebar -->
+                <aside
+                    id="timeline-nav"
+                    class="w-full md:w-1/4 lg:w-1/5 bg-white p-4 rounded-xl shadow-md flex-shrink-0"
+                >
+                    <h2 class="text-xl font-bold mb-4 text-center border-b pb-2">ציר הזמן של הטיול</h2>
+                    <div id="timeline-container" class="space-y-2"></div>
+                </aside>
+
+                <!-- Day details panel -->
+                <section id="details-panel" class="w-full md:w-3/4 lg:w-4/5 bg-white p-6 rounded-xl shadow-lg">
+                    <div id="day-content"></div>
+                </section>
+            </main>
         </div>
-        <!-- Main heading -->
-        <header class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-bold text-teal-800">טיול לרומניה: המסלול המלא</h1>
-            <p class="text-lg text-stone-600 mt-2">7 בספטמבר 2025 - 16 בספטמבר 2025</p>
-        </header>
-
-        <main class="flex flex-col md:flex-row-reverse gap-8">
-            <!-- Timeline sidebar -->
-            <aside id="timeline-nav" class="w-full md:w-1/4 lg:w-1/5 bg-white p-4 rounded-xl shadow-md flex-shrink-0">
-                <h2 class="text-xl font-bold mb-4 text-center border-b pb-2">ציר הזמן של הטיול</h2>
-                <div id="timeline-container" class="space-y-2">
-                </div>
-            </aside>
-
-            <!-- Day details panel -->
-            <section id="details-panel" class="w-full md:w-3/4 lg:w-4/5 bg-white p-6 rounded-xl shadow-lg">
-                <div id="day-content">
-                </div>
-            </section>
-        </main>
-    </div>
-    <!-- Application scripts and Leaflet library -->
-    <script src="theme.js"></script>
-    <script src="script.js"></script>
-    <script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin=""
-    ></script>
-</body>
+        <!-- Application scripts and Leaflet library -->
+        <script src="theme.js"></script>
+        <script src="script.js"></script>
+        <script
+            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""
+        ></script>
+    </body>
 </html>
