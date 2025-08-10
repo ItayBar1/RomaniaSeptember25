@@ -57,7 +57,10 @@ body {
     border-radius: 0.75rem;
     text-decoration: none;
     box-shadow: 0 1px 4px rgba(15, 118, 110, 0.15);
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    transition:
+        background-color 0.2s,
+        color 0.2s,
+        border-color 0.2s;
 }
 
 .nav-button:hover,
@@ -84,7 +87,9 @@ body {
     color: var(--nav-button-color);
     cursor: pointer;
     box-shadow: 0 1px 4px rgba(15, 118, 110, 0.15);
-    transition: background-color 0.2s, color 0.2s;
+    transition:
+        background-color 0.2s,
+        color 0.2s;
 }
 
 .theme-select:hover,
@@ -96,38 +101,42 @@ body {
 
 /* גובה/פריסה בקארד כמו המפה הסכמטית */
 .leaflet-map {
-  position: relative;
-  width: 100%;
-  height: 280px; /* תואם ל-.chart-container */
-  max-height: 300px;
-  border-radius: 0.75rem; /* עגול כמו הקארדים */
-  overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 280px; /* תואם ל-.chart-container */
+    max-height: 300px;
+    border-radius: 0.75rem; /* עגול כמו הקארדים */
+    overflow: hidden;
 }
 
 /* ברירת מחדל (מצב בהיר) – שקיפות עדינה בלבד */
-.leaflet-tile-pane { opacity: 0.65; }
+.leaflet-tile-pane {
+    opacity: 0.65;
+}
 
 /* מצב כהה – שקיפות עדינה יותר (שומר על טקסט/כבישים חדים) */
-body.dark-mode .leaflet-tile-pane { opacity: 0.85; }
+body.dark-mode .leaflet-tile-pane {
+    opacity: 0.85;
+}
 
 /* טולטיפים נוחים לקריאה על מפה כהה */
 .leaflet-tooltip {
-  background: rgba(17, 24, 39, 0.92); /* slate-900 */
-  color: #e5e7eb; /* gray-200 */
-  border: none;
-  box-shadow: 0 2px 10px rgba(0,0,0,.35);
+    background: rgba(17, 24, 39, 0.92); /* slate-900 */
+    color: #e5e7eb; /* gray-200 */
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 /* צבעי שכבות עליונות (נקודות/קווים) יתאמו ל־CSS Vars הקיימים */
 :root {
-  --route-color: #14b8a6; /* teal-500 */
-  --route-stroke: #0f766e; /* teal-700 */
-  --poi-color: #a8a29e;   /* stone-400 */
+    --route-color: #14b8a6; /* teal-500 */
+    --route-stroke: #0f766e; /* teal-700 */
+    --poi-color: #a8a29e; /* stone-400 */
 }
 body.dark-mode {
-  --route-color: #5eead4; /* teal-300 בהיר יותר על רקע כהה */
-  --route-stroke: #99f6e4; /* teal-200 */
-  --poi-color: #94a3b8;   /* slate-400 */
+    --route-color: #5eead4; /* teal-300 בהיר יותר על רקע כהה */
+    --route-stroke: #99f6e4; /* teal-200 */
+    --poi-color: #94a3b8; /* slate-400 */
 }
 
 /* Dark mode variables */
@@ -149,19 +158,38 @@ body.dark-mode {
 }
 
 /* Override common Tailwind classes in dark mode */
-body.dark-mode .bg-white { background-color: var(--card-bg) !important; }
-body.dark-mode .bg-stone-50 { background-color: #1e293b !important; }
-body.dark-mode .bg-stone-100 { background-color: #1e293b !important; }
-body.dark-mode .bg-stone-200 { background-color: #374151 !important; }
-body.dark-mode .bg-stone-300 { background-color: #4b5563 !important; }
-body.dark-mode .bg-teal-100 { background-color: #134e4a !important; }
-
+body.dark-mode .bg-white {
+    background-color: var(--card-bg) !important;
+}
+body.dark-mode .bg-stone-50 {
+    background-color: #1e293b !important;
+}
+body.dark-mode .bg-stone-100 {
+    background-color: #1e293b !important;
+}
+body.dark-mode .bg-stone-200 {
+    background-color: #374151 !important;
+}
+body.dark-mode .bg-stone-300 {
+    background-color: #4b5563 !important;
+}
+body.dark-mode .bg-teal-100 {
+    background-color: #134e4a !important;
+}
 
 body.dark-mode .text-stone-800,
-body.dark-mode .text-stone-700 { color: var(--text-color) !important; }
+body.dark-mode .text-stone-700 {
+    color: var(--text-color) !important;
+}
 body.dark-mode .text-stone-600,
-body.dark-mode .text-stone-500 { color: var(--text-color-muted) !important; }
+body.dark-mode .text-stone-500 {
+    color: var(--text-color-muted) !important;
+}
 body.dark-mode .text-teal-800,
 body.dark-mode .text-teal-700,
-body.dark-mode .text-teal-500 { color: var(--accent-color) !important; }
-body.dark-mode .text-red-500 { color: #f87171 !important; }
+body.dark-mode .text-teal-500 {
+    color: var(--accent-color) !important;
+}
+body.dark-mode .text-red-500 {
+    color: #f87171 !important;
+}

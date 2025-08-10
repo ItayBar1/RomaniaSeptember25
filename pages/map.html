@@ -1,0 +1,61 @@
+<!doctype html>
+<!-- Map page displaying the overall trip route -->
+<html lang="he" dir="rtl">
+    <head>
+        <!-- ===== מידע בסיסי ===== -->
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>מפת הטיול - רומניה</title>
+        <meta name="description" content="מפת מסלולי הטיול לרומניה - כולל נקודות עניין, מסלולים ומידע שימושי." />
+        <meta name="robots" content="index, follow" />
+
+        <!-- ===== Open Graph (לתצוגה בוואטסאפ/פייסבוק) ===== -->
+        <meta property="og:url" content="https://romania-september25.netlify.app/map" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="מפת הטיול - רומניה" />
+        <meta property="og:description" content="מפת מסלולי הטיול לרומניה - כולל נקודות עניין, מסלולים ומידע שימושי." />
+        <meta property="og:image" content="https://photos.app.goo.gl/z43zm71QfeTypPLZ8" />
+
+        <!-- ===== Twitter Card ===== -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="מפת הטיול - רומניה" />
+        <meta
+            name="twitter:description"
+            content="מפת מסלולי הטיול לרומניה - כולל נקודות עניין, מסלולים ומידע שימושי."
+        />
+        <meta name="twitter:image" content="https://photos.app.goo.gl/z43zm71QfeTypPLZ8" />
+
+        <!-- ===== עיצוב ואייקון ===== -->
+        <link
+            rel="icon"
+            href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>"
+        />
+        <link rel="stylesheet" href="../assets/css/style.css" />
+        <link rel="stylesheet" href="../assets/css/map.css" />
+    </head>
+    <body>
+        <div class="container">
+            <!-- Header with theme toggle and navigation back to main page -->
+            <div class="map-header">
+                <a href="../index.html" class="nav-button">חזרה לעמוד הראשי</a>
+                <select id="theme-select" class="theme-select" aria-label="Theme selector">
+                    <option value="light">בהיר</option>
+                    <option value="dark">כהה</option>
+                    <option value="system">מערכת</option>
+                </select>
+            </div>
+            <!-- Embedded Google Map for the itinerary -->
+            <div class="map-wrapper">
+                <iframe
+                    src="https://www.google.com/maps/d/u/0/embed?mid=1hB6APxAe2NbGWmMrgfdEcIwmdmzQKOc&ehbc=2E312F&noprof=1"
+                    allowfullscreen
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                >
+                </iframe>
+            </div>
+        </div>
+        <!-- Theme management script -->
+        <script src="../assets/js/theme.js"></script>
+    </body>
+</html>
