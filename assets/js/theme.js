@@ -8,10 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Apply chosen theme classes based on mode
     function applyTheme(mode) {
         const theme = mode === 'system' ? (prefersDark.matches ? 'dark' : 'light') : mode;
+        body.classList.remove('dark-mode', 'dark', 'romanian-mode');
         if (theme === 'dark') {
             body.classList.add('dark-mode', 'dark');
-        } else {
-            body.classList.remove('dark-mode', 'dark');
+        } else if (theme === 'romanian') {
+            body.classList.add('romanian-mode');
         }
         // Sync Leaflet map tiles if map page is open
         if (typeof window.applyMapTheme === 'function') {

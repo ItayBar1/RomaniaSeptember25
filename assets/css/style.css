@@ -21,6 +21,18 @@ body {
     color: var(--text-color);
 }
 
+body.romanian-mode {
+    background: linear-gradient(
+        to right,
+        #002b7f 0%,
+        #002b7f 33.33%,
+        #fcd116 33.33%,
+        #fcd116 66.66%,
+        #ce1126 66.66%,
+        #ce1126 100%
+    );
+}
+
 .chart-container {
     position: relative;
     width: 100%;
