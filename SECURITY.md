@@ -18,7 +18,7 @@ If you discover a security vulnerability in this repository, please report it di
 
 To report a vulnerability:
 
-1. Send an email to **[your_email@example.com]** with:
+1. Send an email to **itaybar544@gmail.com** with:
    - A description of the vulnerability.
    - Steps to reproduce.
    - Any relevant logs, screenshots, or proof of concept code.
