@@ -52,4 +52,4 @@ To report a vulnerability:
 
 ## Contact
 
-Security concerns: **[your_email@example.com]**
+Security concerns: **itaybar544@gmail.com**
