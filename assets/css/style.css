@@ -57,10 +57,7 @@ body {
     border-radius: 0.75rem;
     text-decoration: none;
     box-shadow: 0 1px 4px rgba(15, 118, 110, 0.15);
-    transition:
-        background-color 0.2s,
-        color 0.2s,
-        border-color 0.2s;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .nav-button:hover,
@@ -87,9 +84,7 @@ body {
     color: var(--nav-button-color);
     cursor: pointer;
     box-shadow: 0 1px 4px rgba(15, 118, 110, 0.15);
-    transition:
-        background-color 0.2s,
-        color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .theme-select:hover,
@@ -165,7 +160,7 @@ body.dark-mode .bg-white\/80 {
     background-color: rgba(51, 65, 85, 0.8) !important;
 }
 body.dark-mode .bg-404 {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     background-blend-mode: multiply;
 }
 body.dark-mode .bg-stone-50 {

@@ -276,21 +276,21 @@ function renderRealMap(dayData) {
     if (!lightTiles || !darkTiles) makeTiles();
 
     realMap = L.map(mapEl, {
-        zoomControl: false,
+        zoomControl: true,
         attributionControl: false,
         dragging: true,
-        scrollWheelZoom: false,
-        doubleClickZoom: false,
-        boxZoom: false,
-        keyboard: false,
-        tap: false,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        boxZoom: true,
+        keyboard: true,
+        tap: true,
+        minZoom: 6,
     });
 
     window.applyMapTheme();
 
     // All POIs (subtle)
     Object.entries(coordsLatLng).forEach(([name, ll]) => {
-        // נקודות רקע (All POIs) – נשאר עדין
         L.circleMarker([ll.lat, ll.lng], {
             radius: 5,
             color: css('--poi-color'),
@@ -316,9 +316,9 @@ function renderRealMap(dayData) {
         // נקודות היום – גדולות יותר וקונטור בהיר
         L.circleMarker(latlng, {
             radius: 5,
-            color: css('--route-stroke'), // לבן בדארק
+            color: css('--route-stroke'),
             weight: 3,
-            fillColor: css('--route-color'), // טורקיז/ציאן בהיר
+            fillColor: css('--route-color'),
             fillOpacity: 0.95,
         })
             .bindTooltip(dayNames[i], { direction: 'top' })
@@ -342,6 +342,28 @@ function renderRealMap(dayData) {
         // Fallback view
         realMap.setView([45.8, 24.9], 6);
     }
+
+    // כפתור "חזרה לרומניה"
+    const homeControl = L.control({ position: 'topleft' });
+    homeControl.onAdd = function (map) {
+        // עטיפה בסגנון Leaflet כדי שלא ישפיע על פריסת המפה
+        const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control');
+        const link = L.DomUtil.create('a', '', container);
+        link.href = '#';
+        link.title = 'מרכז לרומניה';
+        link.innerHTML = '🏠';
+
+        // מניעת בועת אירועים/גלילה
+        L.DomEvent.disableClickPropagation(container);
+        L.DomEvent.on(link, 'click', (e) => {
+            L.DomEvent.preventDefault(e);
+            if (ALL_BOUNDS) map.fitBounds(ALL_BOUNDS, { padding: [16, 16] });
+            else map.setView([45.8, 24.9], 6);
+        });
+
+        return container;
+    };
+    homeControl.addTo(realMap);
 
     // Ensure proper sizing after DOM paints
     setTimeout(() => realMap.invalidateSize(), 0);
@@ -406,7 +428,9 @@ function sanitizeAiText(str) {
 async function getFunFact(locations) {
     const outputDiv = document.getElementById('funFactOutput');
     outputDiv.innerHTML = `<p class="text-center text-stone-500">טוען עובדה מהנה...</p>`;
-    const prompt = `Provide a single, short, and interesting fun fact in Hebrew about one of the following locations in Romania: ${locations.join(', ')}. Do not include the location name at the beginning of the fact.`;
+    const prompt = `Provide a single, short, and interesting fun fact in Hebrew about one of the following locations in Romania: ${locations.join(
+        ', '
+    )}. Do not include the location name at the beginning of the fact.`;
     const fact = await callGeminiApi(prompt);
     const clean = sanitizeAiText(fact);
     outputDiv.innerHTML = `<p class="p-3 bg-teal-100 text-teal-800 rounded-lg shadow-inner">${clean}</p>`;
@@ -418,7 +442,9 @@ async function getRainyDayActivity(locations) {
     outputDiv.innerHTML = `<p class="text-center text-stone-500">מחפש רעיון ליום גשום...</p>`;
     const prompt = [
         'Answer in Hebrew only. Only English spellings of place names are allowed (e.g. "Brasov", "Sibiu") and no translation in parentheses.',
-        `Give one specific and short recommendation for a rainy day activity, based on the following places in Romania: ${locations.join(', ')}.`,
+        `Give one specific and short recommendation for a rainy day activity, based on the following places in Romania: ${locations.join(
+            ', '
+        )}.`,
         'Respond in one sentence only, without opening/closing text, without quotation marks and without parentheses.',
     ].join(' ');
     const activity = await callGeminiApi(prompt);
