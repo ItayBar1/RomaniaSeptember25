@@ -520,6 +520,8 @@ function selectDay(index) {
 // Render details for the selected itinerary day
 function renderDayDetails(dayData) {
     const weekday = getWeekdayName(dayData.date);
+    const weatherLocation = dayData.locations[0];
+    const weatherCity = weatherLocation.split(',')[0];
     dayContentContainer.innerHTML = `
     <div class="animate-fade-in">
       <h2 class="text-3xl font-bold text-teal-700 mb-1">יום ${dayData.day}: ${dayData.title}</h2>
@@ -588,7 +590,7 @@ function renderDayDetails(dayData) {
       </div>
 
       <div class="border-t pt-6 mt-6 text-center">
-        <h3 class="text-2xl font-bold text-center mb-4">☁️ מזג אוויר</h3>
+        <h3 class="text-2xl font-bold text-center mb-4">☁️ מזג האוויר ב${weatherCity}</h3>
         <div class="bg-stone-50 dark:bg-stone-800 p-4 rounded-lg">
           <div id="weatherOutput"></div>
         </div>
@@ -597,7 +599,7 @@ function renderDayDetails(dayData) {
 
     document.getElementById('funFactBtn').onclick = () => getFunFact(dayData.locations);
     document.getElementById('rainyDayBtn').onclick = () => getRainyDayActivity(dayData.locations);
-    fetchWeatherData(dayData.locations[0]);
+    fetchWeatherData(weatherLocation);
 
     renderRealMap(dayData);
     renderCharts(dayData);
